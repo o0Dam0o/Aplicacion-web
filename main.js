@@ -67,8 +67,7 @@ function comprar() {
     1.Buscar Producto
     2.Ver Catalogo
     3.Ver Carrito
-    4.Volver al Menu
-    5.Sali`)
+    4.Volver al Menu`)
 	);
 	switch (opc) {
 		case 1:
@@ -76,7 +75,15 @@ function comprar() {
 			break;
 		case 2:
 			catalogo();
+			break;
+		case 3:
+			carritoCompra();
+			break;
+		case 4:
+			menu();
+			break;
 		default:
+			alert("Error de tipeado");
 			break;
 	}
 }
@@ -198,6 +205,83 @@ function catalogo() {
 	}
 	comprar();
 }
+function carritoCompra() {
+	if (carrito.length == 0) {
+		alert("No tenes ningun productos \nanda a comprar");
+		comprar();
+	}
+	carrito.forEach((art) => {
+		alert(`
+        Categoria : ${art.categoria}\n
+        Nombre : ${art.nombre}\n
+        Descripcion : ${art.descripcion}\n
+        Precio : ${art.precio}`);
+	});
+	let opc = parseInt(
+		prompt(`
+    Carrito\n
+    1.Seguir Comprando\n
+    2.Finalizar Compra`)
+	);
+	if (opc == 1) {
+		buscarProducto();
+	} else if (opc == 2) {
+		let opc1 = parseInt(
+			prompt(`
+        Finalizando Compra\n
+        "Pago con Tarjeta Tiene Recargo de IVA"\n
+        1.Pago en Efectivo
+        2.Pago Debito o Credito
+        3.Volver atras`)
+		);
+		caja(opc1);
+	}
+}
+function caja(opc1) {
+	const montoTotal = carrito.reduce((total, art) => total + art.precio, 0);
+	if (opc1 == 1) {
+		let opc2 = prompt(`
+    Carrito Total\n
+    Articulo ${carrito.length}
+    Total : $${montoTotal}\n
+    ¿Tenes un Codigo de Descuento?
+    -Si
+    -No`);
+		if (opc2.toLowerCase() == "si") {
+			let descuento = prompt("Ingrese Codigo"); //"ADANCODERHOUSE"
+			if (descuento == "ADANCODERHOUSE") {
+				alert(`
+            Carrito Total\n
+            Articulo ${carrito.length}
+            Total : $${montoTotal} - 25% : $${
+					(montoTotal * 25) / 100 - montoTotal
+				}\n`);
+			}
+		}
+		alert("Gracias por su compras\nHasta la proxima");
+	} else if (opc1 == 2) {
+		let opc = prompt(`
+        Carrito Total\n
+        Articulo ${carrito.length}
+        Total : $${montoTotal * 1.21} + IVA\n
+        ¿Tenes un Codigo de Descuento?
+        -Si
+        -No`);
+		console.log(opc);
+		if (opc.toLowerCase() == "si") {
+			let descuento = prompt("Ingrese Codigo");
+			//"ADANCODERHOUSE"
+			console.log(descuento);
+			if (descuento == "ADANCODERHOUSE") {
+				alert(`
+                Carrito Total\n
+                Articulo ${carrito.length}
+                Total : $${montoTotal * 1.21 - 3000} + IVA\n`);
+			}
+		}
+		alert("Gracias por su compras\nHasta la proxima");
+	}
+}
 //Funcion Creada porque se me hacia muy repetitiva
 function agregarCarrito(resultado) {
 	resultado.forEach((art) => {
@@ -209,6 +293,53 @@ function agregarCarrito(resultado) {
 		}
 		console.log(carrito);
 	});
+}
+function vender() {
+	let opc = parseInt(
+		prompt(`
+    Vender\n
+    1.Agregar Productos
+    2.Eliminar Productos
+    3.Ver Catalogo
+    4.Volver al menu`)
+	);
+	switch (opc) {
+		case 1:
+			let cantidad = parseInt(prompt("Cuantos Productos vas a crear ?"));
+			for (let i = 1; i <= cantidad; i++) {
+				productos.push(
+					new Productos(
+						prompt("Categoria " + i),
+						prompt("Nombre del producto " + i),
+						prompt("Descripcion del producto " + i),
+						prompt("Precio del producto " + i)
+					)
+				);
+			}
+			vender();
+		case 2:
+			let buscado = prompt("Buscar Producto");
+			const resultado = productos.filter((art) =>
+				art.nombre.includes(buscado.toUpperCase())
+			);
+			console.log(resultado);
+			alert(`Se Encontraron ${resultado.length} Productos`);
+			let opc1 = prompt(
+				"Deseas Eliminar? \nIngresa el Nombre completo de lo contraio regresas atras"
+			);
+			const o = productos.findIndex((element) => {
+				return element.nombre === opc1.toUpperCase();
+			});
+			productos.splice(o, 1);
+			console.log(o);
+			console.log(productos);
+			alert("Eliminado");
+			vender();
+		case 3:
+			catalogo();
+		case 4:
+			menu();
+	}
 }
 function menu() {
 	alert(`  BIENVENIDO A -ZELDA GAMER- `);
@@ -226,8 +357,10 @@ function menu() {
 			comprar();
 			break;
 		case 2:
+			vender();
 			break;
 		case 3:
+			catalogo();
 			break;
 		default:
 			break;
