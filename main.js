@@ -343,27 +343,34 @@ function vender() {
 }
 function menu() {
 	alert(`  BIENVENIDO A -ZELDA GAMER- `);
-	let opc = parseInt(
-		prompt(`
-     -ZEDA GAMER-\n
-    1.Comprar Productos
-    2.Vender Productos
-    3.Ver Catalogo
-    4.Salir
-    `)
-	);
-	switch (opc) {
-		case 1:
-			comprar();
-			break;
-		case 2:
-			vender();
-			break;
-		case 3:
-			catalogo();
-			break;
-		default:
-			break;
+	let encededor = true;
+	while (encededor) {
+		let opc = parseInt(
+			prompt(`
+		 -ZEDA GAMER-\n
+		1.Comprar Productos
+		2.Vender Productos
+		3.Ver Catalogo
+		4.Salir
+		`)
+		);
+		switch (opc) {
+			case 1:
+				comprar();
+				break;
+			case 2:
+				vender();
+				break;
+			case 3:
+				catalogo();
+				break;
+			case 4:
+				encededor = false;
+				break;
+			default:
+				alert("Igrese un digito valido");
+				break;
+		}
 	}
 }
 
